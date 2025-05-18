@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parakeet Speech Transcription</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Parakeet Speech Transcription</h1>
+            <p>Upload an audio file to get a transcription</p>
+        </header>
+
+        <div class="upload-container">
+            <form id="upload-form" enctype="multipart/form-data">
+                <div class="file-upload-area" id="drop-area">
+                    <input type="file" id="file-input" name="file" accept="audio/*" hidden>
+                    <div class="upload-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 16V8M12 8L9 11M12 8L15 11" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                    </div>
+                    <p>Drag and drop an audio file here or <span id="file-select">browse</span></p>
+                    <p class="small">Supported formats: WAV, MP3, FLAC (max 16MB)</p>
+                </div>
+                
+                <div class="options">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="include-timestamps" name="timestamps" value="true">
+                        <span class="checkmark"></span>
+                        Include timestamps
+                    </label>
+                </div>
+
+                <button type="submit" id="transcribe-btn" disabled>Transcribe</button>
+            </form>
+            
+            <div class="file-info hidden" id="file-info">
+                <div class="file-preview">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M9 17H15M9 13H15M9 9H10M14 3H8C6.89543 3 6 3.89543 6 5V19C6 20.1046 6.89543 21 8 21H16C17.1046 21 18 20.1046 18 19V7L14 3Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                    <span id="file-name">filename.wav</span>
+                </div>
+                <button id="remove-file">Remove</button>
+            </div>
+        </div>
+
+        <div class="transcription-container hidden" id="transcription-container">
+            <div class="loading-indicator hidden" id="loading-indicator">
+                <div class="spinner"></div>
+                <p>Transcribing...</p>
+            </div>
+
+            <div class="results hidden" id="results">
+                <h2>Transcription</h2>
+                <div class="text-container">
+                    <p id="transcription-text"></p>
+                </div>
+
+                <div id="timestamps-container" class="hidden">
+                    <h3>Timestamps</h3>
+                    <div class="timestamps" id="timestamps-list">
+                        <!-- Timestamps will be inserted here -->
+                    </div>
+                </div>
+
+                <div class="audio-player" id="audio-player">
+                    <audio controls id="audio-element" src=""></audio>
+                </div>
+                
+                <div class="actions">
+                    <button id="new-transcription">Transcribe Another File</button>
+                </div>
+            </div>
+
+            <div class="error hidden" id="error-message">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <p id="error-text">Something went wrong. Please try again.</p>
+                <button id="try-again">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html> 

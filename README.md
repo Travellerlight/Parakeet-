@@ -1,6 +1,6 @@
 # Parakeet Offline Transcription
 
-This repository provides a simple command line interface for offline speech transcription using a model.safetensors format. The model files are not committed to git and must be downloaded separately.
+This repository provides a simple interface for offline speech transcription using a model.safetensors format. The model files are not committed to git and must be downloaded separately.
 
 ## Requirements
 
@@ -9,11 +9,12 @@ This repository provides a simple command line interface for offline speech tran
 - SafeTensors
 - pydub (for audio processing)
 - ffmpeg (for audio file handling)
+- Flask (for web interface)
 
 Install dependencies with:
 
 ```bash
-pip install torch safetensors pydub
+pip install torch safetensors pydub flask
 ```
 
 You'll also need to install ffmpeg on your system.
@@ -27,6 +28,8 @@ Place the following files in the `parakeet-tdt-0.6b-v2/` directory:
 - `tokenizer.model` - Tokenizer model (if needed)
 
 ## Usage
+
+### Command Line Interface
 
 Run the transcription script:
 
@@ -42,23 +45,48 @@ python offline_transcribe.py --timestamps example.wav
 
 The script prints the transcription and, when requested, segment timestamps for each provided audio file.
 
+### Web Interface
+
+Run the Flask web application:
+
+```bash
+python app.py
+```
+
+Then access the web interface at: http://localhost:3000
+
+The web interface allows you to:
+- Upload audio files through the browser
+- View transcription results
+- See timestamps (optional)
+- Play back the audio with timestamps that are clickable to jump to specific positions
+
 ## Docker Usage
 
 The project includes Docker support for easy deployment:
 
-1. Place your audio files in the `input` directory.
-2. Make sure the model files are in the correct location (`parakeet-tdt-0.6b-v2/` directory).
-3. Build and run using Docker Compose:
+1. Make sure the model files are in the correct location (`parakeet-tdt-0.6b-v2/` directory).
+2. Build and run using Docker Compose:
 
 ```bash
 docker-compose build
-docker-compose run parakeet input/<audio-file>
+docker-compose up
+```
+
+This will start both the command-line tool and the web interface.
+
+Access the web interface at: http://localhost:3000
+
+To run the command-line transcription instead:
+
+```bash
+docker-compose run parakeet python offline_transcribe.py input/<audio-file>
 ```
 
 To include timestamps:
 
 ```bash
-docker-compose run parakeet --timestamps input/<audio-file>
+docker-compose run parakeet python offline_transcribe.py --timestamps input/<audio-file>
 ```
 
 Requirements for Docker:

@@ -7,6 +7,9 @@ services:
       - ./parakeet-tdt-0.6b-v2:/app/parakeet-tdt-0.6b-v2
       - ./input:/app/input
       - ./output:/app/output
+      - ./uploads:/app/uploads
+    ports:
+      - "3000:3000"
     # Removing GPU requirements for macOS compatibility
     # deploy:
     #   resources:
