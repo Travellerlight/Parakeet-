@@ -314,4 +314,134 @@ button:disabled {
     .file-upload-area {
         padding: 30px 15px;
     }
+}
+
+/* Model status warning */
+.model-status-warning {
+    display: flex;
+    align-items: center;
+    background-color: #fff3cd;
+    border-left: 4px solid #ffc107;
+    padding: 10px 15px;
+    margin: 20px 0;
+    border-radius: 4px;
+    color: #856404;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.model-status-warning svg {
+    flex-shrink: 0;
+    margin-right: 15px;
+    stroke: #856404;
+}
+
+.model-status-warning div {
+    flex: 1;
+}
+
+.model-status-warning p {
+    margin: 5px 0 0 0;
+    font-size: 0.9rem;
+    opacity: 0.9;
+}
+
+/* Demo mode banner in results */
+.demo-mode-banner {
+    display: flex;
+    align-items: center;
+    background-color: #e2f3fd;
+    border-left: 4px solid #17a2b8;
+    padding: 10px 15px;
+    margin: 0 0 20px 0;
+    border-radius: 4px;
+    color: #0c5460;
+}
+
+.demo-mode-banner svg {
+    flex-shrink: 0;
+    margin-right: 10px;
+    stroke: #0c5460;
+}
+
+/* Footer styles */
+footer {
+    margin-top: 30px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    color: #666;
+    font-size: 0.8rem;
+    text-align: center;
+}
+
+footer p {
+    margin: 5px 0;
+}
+
+footer .available {
+    color: #28a745;
+    font-weight: bold;
+}
+
+footer .missing {
+    color: #dc3545;
+}
+
+/* Update text content display */
+.text-container {
+    background-color: #f8f9fa;
+    border-radius: 4px;
+    padding: 15px;
+    margin-bottom: 20px;
+    max-height: 300px;
+    overflow-y: auto;
+    border: 1px solid #eee;
+}
+
+#transcription-text {
+    white-space: pre-wrap;
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+}
+
+/* Improved audio player */
+.audio-player {
+    margin: 20px 0;
+}
+
+.audio-player h3 {
+    margin-bottom: 10px;
+    font-size: 1.2rem;
+}
+
+.audio-player audio {
+    width: 100%;
+    border-radius: 4px;
+}
+
+/* Timestamps styling improvements */
+.timestamp-item {
+    cursor: pointer;
+    padding: 8px 12px;
+    border-radius: 4px;
+    margin-bottom: 8px;
+    background-color: #f8f9fa;
+    border: 1px solid #e9ecef;
+    transition: background-color 0.2s ease;
+}
+
+.timestamp-item:hover {
+    background-color: #e9ecef;
+}
+
+.timestamp-time {
+    font-size: 0.85rem;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.timestamp-text {
+    color: #212529;
+    margin-top: 4px;
 } 

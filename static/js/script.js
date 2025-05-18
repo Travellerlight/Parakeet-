@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const errorText = document.getElementById('error-text');
     const tryAgainBtn = document.getElementById('try-again');
     const newTranscriptionBtn = document.getElementById('new-transcription');
+    const modelStatusIndicator = document.getElementById('model-status-indicator');
 
     // File handling
     let selectedFile = null;
@@ -127,7 +128,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Check for errors
             if (!response.ok) {
-                throw new Error('Server responded with an error');
+                const errorData = await response.json();
+                throw new Error(errorData.error || 'Server responded with an error');
             }
 
             // Parse response
@@ -150,6 +152,13 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Update transcription text
         transcriptionText.textContent = data.text;
+        
+        // Show model status if using dummy model
+        if (data.dummy_model) {
+            modelStatusIndicator.classList.remove('hidden');
+        } else {
+            modelStatusIndicator.classList.add('hidden');
+        }
         
         // Update audio player
         audioElement.src = `/uploads/${data.filename}`;
@@ -209,5 +218,19 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // Hide transcription container
         transcriptionContainer.classList.add('hidden');
+    });
+    
+    // Add click handlers to any audio timestamps
+    document.addEventListener('click', (e) => {
+        if (e.target.closest('.timestamp-item')) {
+            const timestampItem = e.target.closest('.timestamp-item');
+            const timeText = timestampItem.querySelector('.timestamp-time').textContent;
+            const startTime = parseFloat(timeText.split('-')[0]);
+            
+            if (!isNaN(startTime) && audioElement) {
+                audioElement.currentTime = startTime;
+                audioElement.play();
+            }
+        }
     });
 }); 

@@ -8,8 +8,11 @@ RUN apt-get update && apt-get install -y \
     ffmpeg \
     && rm -rf /var/lib/apt/lists/*
 
-# Install PyTorch and other dependencies
-RUN pip install --no-cache-dir torch numpy safetensors pydub flask
+# Copy requirements first for better caching
+COPY requirements.txt .
+
+# Install dependencies from requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Install Mac-specific dependencies when on Mac
 ARG TARGETPLATFORM
@@ -21,6 +24,7 @@ RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] || [ "$TARGETPLATFORM" = "darwin" ]
 COPY offline_transcribe.py app.py simple_transcribe.py ./
 COPY templates templates/
 COPY static static/
+COPY tools tools/
 
 # Create necessary directories
 RUN mkdir -p input uploads output

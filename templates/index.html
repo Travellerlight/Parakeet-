@@ -12,6 +12,24 @@
         <header>
             <h1>Parakeet Speech Transcription</h1>
             <p>Upload an audio file to get a transcription</p>
+            
+            {% if model_status != "loaded" %}
+            <div class="model-status-warning">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 8V12M12 16H12.01M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <div>
+                    <strong>Notice:</strong> Running in demonstration mode with simulated transcription.
+                    {% if model_status == "missing_directory" %}
+                    <p>The model directory was not found. Please add the model files to use real transcription.</p>
+                    {% elif model_status == "missing_dependencies" %}
+                    <p>Required dependencies (safetensors/PyTorch) are not installed. Install them to use real transcription.</p>
+                    {% elif model_status == "missing_files" %}
+                    <p>Model files are incomplete or corrupt. Please ensure all required files are present.</p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endif %}
         </header>
 
         <div class="upload-container">
@@ -58,8 +76,18 @@
 
             <div class="results hidden" id="results">
                 <h2>Transcription</h2>
+                
+                <div id="model-status-indicator" class="hidden">
+                    <div class="demo-mode-banner">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M13 16H12V12H11M12 8H12.01M21.73 18L13.73 4C13.5555 3.7083 13.3034 3.4693 13 3.3151C12.6967 3.161 12.3506 3.0886 12 3.1077C11.6494 3.0886 11.3033 3.161 11 3.3151C10.6966 3.4693 10.4445 3.7083 10.27 4L2.26996 18C2.08824 18.3097 2.00227 18.6643 2.02634 19.0214C2.05041 19.3785 2.1833 19.7185 2.40838 19.9986C2.63347 20.2787 2.94411 20.4862 3.29169 20.5915C3.63927 20.6968 4.00574 20.6953 4.34996 20.59L12 18L19.65 20.59C19.9942 20.6953 20.3607 20.6968 20.7083 20.5915C21.0559 20.4862 21.3665 20.2787 21.5916 19.9986C21.8167 19.7185 21.9496 19.3785 21.9737 19.0214C21.9977 18.6643 21.9117 18.3097 21.73 18Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span>This is a simulated transcription. Real model is not loaded.</span>
+                    </div>
+                </div>
+
                 <div class="text-container">
-                    <p id="transcription-text"></p>
+                    <pre id="transcription-text"></pre>
                 </div>
 
                 <div id="timestamps-container" class="hidden">
@@ -70,6 +98,7 @@
                 </div>
 
                 <div class="audio-player" id="audio-player">
+                    <h3>Audio Playback</h3>
                     <audio controls id="audio-element" src=""></audio>
                 </div>
                 
@@ -86,6 +115,17 @@
                 <button id="try-again">Try Again</button>
             </div>
         </div>
+        
+        <footer>
+            <p>Dependencies: 
+                SafeTensors: <span class="{{ 'available' if dependencies.safetensors else 'missing' }}">{{ '✓' if dependencies.safetensors else '✗' }}</span> | 
+                PyDub: <span class="{{ 'available' if dependencies.pydub else 'missing' }}">{{ '✓' if dependencies.pydub else '✗' }}</span> | 
+                PyTorch: <span class="{{ 'available' if dependencies.torch else 'missing' }}">{{ '✓' if dependencies.torch else '✗' }}</span>
+                {% if dependencies.mlx %}
+                | MLX: <span class="available">✓</span>
+                {% endif %}
+            </p>
+        </footer>
     </div>
 
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
