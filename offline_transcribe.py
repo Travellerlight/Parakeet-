@@ -30,6 +30,7 @@ except ImportError:
     print("WARNING: PyTorch not installed. Model inference will be disabled.")
 
 # MLX for Mac support
+MLX_AVAILABLE = False
 try:
     import platform
     if platform.system() == "Darwin":
