@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  parakeet:
+    build: .
+    volumes:
+      - .:/app
+      - ./input:/app/input
+      - ./output:/app/output
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu] 
