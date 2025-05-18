@@ -1,0 +1,19 @@
+FROM python:3.9-slim
+
+WORKDIR /app
+
+# Install required dependencies
+RUN pip install --no-cache-dir torch numpy safetensors pydub
+
+# Install Mac-specific dependencies when on Mac
+ARG TARGETPLATFORM
+RUN if [ "$TARGETPLATFORM" = "linux/arm64" ] || [ "$TARGETPLATFORM" = "darwin" ] || [ -z "$TARGETPLATFORM" -a "$(uname -m)" = "arm64" ]; then \
+    pip install --no-cache-dir mlx || echo "MLX installation skipped (only works on Apple Silicon)"; \
+    fi
+
+# Copy only the test script and sample files
+COPY test_transcription.py .
+COPY input/ input/
+
+# Set entrypoint to the test script
+ENTRYPOINT ["python", "test_transcription.py"] 

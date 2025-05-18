@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  parakeet-test:
+    build:
+      context: .
+      dockerfile: Dockerfile.test
+      args:
+        - TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
+    volumes:
+      - ./input:/app/input 

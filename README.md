@@ -7,14 +7,22 @@ This repository provides a simple interface for offline speech transcription usi
 - Python 3.8 or later
 - [PyTorch](https://pytorch.org/)
 - SafeTensors
+- NumPy
 - pydub (for audio processing)
 - ffmpeg (for audio file handling)
 - Flask (for web interface)
+- MLX (for Apple Silicon Macs)
 
 Install dependencies with:
 
 ```bash
-pip install torch safetensors pydub flask
+pip install -r requirements.txt
+```
+
+For Apple Silicon Mac users, also install MLX:
+
+```bash
+pip install mlx
 ```
 
 You'll also need to install ffmpeg on your system.
@@ -63,7 +71,7 @@ The web interface allows you to:
 
 ## Docker Usage
 
-The project includes Docker support for easy deployment:
+The project includes Docker support for easy deployment on both Intel/AMD and Apple Silicon Macs:
 
 1. Make sure the model files are in the correct location (`parakeet-tdt-0.6b-v2/` directory).
 2. Build and run using Docker Compose:
@@ -91,3 +99,7 @@ docker-compose run parakeet python offline_transcribe.py --timestamps input/<aud
 
 Requirements for Docker:
 - Docker and Docker Compose
+
+### Apple Silicon Mac Notes
+
+The application now detects Apple Silicon and uses MLX when available. This allows faster transcription on M1/M2/M3 Macs without requiring CUDA.

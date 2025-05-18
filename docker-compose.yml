@@ -2,7 +2,10 @@ version: '3'
 
 services:
   parakeet:
-    build: .
+    build: 
+      context: .
+      args:
+        - TARGETPLATFORM=${TARGETPLATFORM:-linux/amd64}
     volumes:
       - ./parakeet-tdt-0.6b-v2:/app/parakeet-tdt-0.6b-v2
       - ./input:/app/input
@@ -10,7 +13,11 @@ services:
       - ./uploads:/app/uploads
     ports:
       - "3000:3000"
-    # Removing GPU requirements for macOS compatibility
+    environment:
+      - TZ=UTC
+    restart: unless-stopped
+    # GPU requirements are commented out for macOS compatibility
+    # Uncomment these on Linux systems with NVIDIA GPUs
     # deploy:
     #   resources:
     #     reservations:

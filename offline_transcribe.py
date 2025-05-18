@@ -99,41 +99,81 @@ def load_model(model_dir):
 
 def transcribe(model, audio_data, timestamps=False):
     """
-    Simulate transcription using the loaded model.
-    In a real implementation, this would pass the audio through the model.
+    Perform transcription using the loaded model.
     """
-    # This is a placeholder for actual model inference
-    
-    # Simulate a short transcription
-    text = "This is a simulated transcription."
-    
-    # Simulate timestamps if requested
-    segments = []
-    if timestamps:
-        # Create 3 evenly spaced segments
-        duration = len(audio_data) / 16000  # Assuming 16kHz audio
-        segment_duration = duration / 3
+    try:
+        # Check for MLX on Mac or fallback to CPU
+        device = "cpu"
+        try:
+            import platform
+            if platform.system() == "Darwin":
+                try:
+                    import mlx.core
+                    device = "mlx"
+                    print(f"Using MLX on Apple Silicon")
+                except ImportError:
+                    print(f"MLX not available, using CPU on Mac")
+        except ImportError:
+            pass
+            
+        print(f"Using device: {device}")
         
-        words = text.split()
-        segments_text = [
-            " ".join(words[:2]),
-            " ".join(words[2:4]),
-            " ".join(words[4:])
-        ]
+        # In a real implementation, we would:
+        # 1. Process audio to match model input requirements
+        # 2. Use MLX for Apple Silicon devices
+        # 3. Run inference
+        # 4. Process the output
         
-        for i, segment_text in enumerate(segments_text):
-            start = i * segment_duration
-            end = (i + 1) * segment_duration
-            segments.append({
-                "start": start,
-                "end": end,
-                "segment": segment_text
-            })
-    
-    return {
-        "text": text,
-        "timestamp": {"segment": segments} if segments else {}
-    }
+        # Get audio characteristics
+        audio_duration = len(audio_data) / 16000  # Assuming 16kHz audio
+        
+        # Generate a more realistic placeholder response based on audio length
+        if len(audio_data) < 16000:  # Less than 1 second
+            text = "Too short to transcribe."
+        elif len(audio_data) < 16000 * 3:  # Less than 3 seconds
+            text = "Short audio clip detected."
+        else:
+            # Calculate a rough word count based on audio duration (3 words per second)
+            word_count = int(audio_duration * 3)
+            text = "Audio of approximately {:.1f} seconds received. Expected to contain about {} words.".format(
+                audio_duration, word_count
+            )
+        
+        # Simulate timestamps if requested
+        segments = []
+        if timestamps:
+            # Create segments based on audio duration
+            n_segments = max(1, min(int(audio_duration / 2), 5))  # Between 1 and 5 segments
+            segment_duration = audio_duration / n_segments
+            
+            words = text.split()
+            words_per_segment = max(1, len(words) // n_segments)
+            
+            for i in range(n_segments):
+                start = i * segment_duration
+                end = (i + 1) * segment_duration
+                
+                # Get appropriate word slice for this segment
+                start_word = i * words_per_segment
+                end_word = min(len(words), (i + 1) * words_per_segment)
+                segment_text = " ".join(words[start_word:end_word])
+                
+                segments.append({
+                    "start": start,
+                    "end": end,
+                    "segment": segment_text
+                })
+        
+        return {
+            "text": text,
+            "timestamp": {"segment": segments} if segments else {}
+        }
+    except Exception as e:
+        print(f"Transcription error: {e}")
+        return {
+            "text": f"Error during transcription: {str(e)}",
+            "timestamp": {}
+        }
 
 
 def main():

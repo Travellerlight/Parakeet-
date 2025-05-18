@@ -1,2 +1,25 @@
 # Ignore large model files
 parakeet-tdt-0.6b-v2/*.nemo
+parakeet-tdt-0.6b-v2/*.safetensors
+parakeet-tdt-0.6b-v2/model.safetensors
+parakeet-tdt-0.6b-v2/tokenizer.model
+
+# Virtual environments
+venv/
+.venv/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Uploaded files and outputs
+uploads/*
+!uploads/.gitkeep
+output/*
+!output/.gitkeep
+input/*
+!input/.gitkeep
+
+# Mac 
+.DS_Store
