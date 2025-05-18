@@ -4,13 +4,14 @@ services:
   parakeet:
     build: .
     volumes:
-      - .:/app
+      - ./parakeet-tdt-0.6b-v2:/app/parakeet-tdt-0.6b-v2
       - ./input:/app/input
       - ./output:/app/output
-    deploy:
-      resources:
-        reservations:
-          devices:
-            - driver: nvidia
-              count: 1
-              capabilities: [gpu] 
+    # Removing GPU requirements for macOS compatibility
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu] 
